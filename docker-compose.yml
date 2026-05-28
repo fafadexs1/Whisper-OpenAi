@@ -10,8 +10,17 @@ services:
     restart: unless-stopped
     ports:
       - "8123:8123"
-    env_file:
-      - .env
+    environment:
+      # ── Modelo ──────────────────────────────────
+      WHISPER_MODEL: ${WHISPER_MODEL}
+      WHISPER_DEVICE: ${WHISPER_DEVICE}
+      WHISPER_COMPUTE_TYPE: ${WHISPER_COMPUTE_TYPE}
+      WHISPER_CPU_THREADS: ${WHISPER_CPU_THREADS}
+      WHISPER_NUM_WORKERS: ${WHISPER_NUM_WORKERS}
+      # ── API ─────────────────────────────────────
+      MAX_FILE_SIZE_MB: ${MAX_FILE_SIZE_MB}
+      WHISPER_API_KEY: ${WHISPER_API_KEY}
+      BASE_URL: ${BASE_URL}
     volumes:
       # Cache de modelos (evita re-download se o container recriar)
       - whisper-cache:/root/.cache

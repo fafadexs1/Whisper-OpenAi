@@ -1,0 +1,32 @@
+# Whisper Transcription API - Dialogy
+# docker-compose para uso com EasyPanel ou local
+
+services:
+  whisper-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: whisper-api
+    restart: unless-stopped
+    ports:
+      - "8123:8123"
+    env_file:
+      - .env
+    volumes:
+      # Cache de modelos (evita re-download se o container recriar)
+      - whisper-cache:/root/.cache
+    deploy:
+      resources:
+        limits:
+          memory: 8G
+        reservations:
+          memory: 4G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8123/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 120s
+      retries: 3
+
+volumes:
+  whisper-cache:
